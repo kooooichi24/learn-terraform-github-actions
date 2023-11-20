@@ -41,8 +41,6 @@ jobs:
         continue-on-error: true
 
       - uses: actions/github-script@v6
-        env:
-          PLAN: "terraform\n${{ steps.apply.outputs.stdout }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -50,7 +48,7 @@ jobs:
             <details><summary>Show Apply</summary>
 
             \`\`\`\n
-            ${process.env.PLAN}
+            ${{ steps.apply.outputs.stdout }}
             \`\`\`
 
             </details>
