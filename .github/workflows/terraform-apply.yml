@@ -10,10 +10,28 @@ on:
 env:
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
   TF_ACTIONS_WORKING_DIR: ${{ github.ref_name == 'main' && './prod' || './dev' }}
+  DIFF_TARGET_DIR: ${{ github.base_ref == 'main' && 'prod' || 'dev' }}
 
 jobs:
+  check:
+    name: Check changed files
+    outputs:
+      run: ${{ steps.diff.outputs.diff }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Check if Terraform plan should be run based on PR diff
+        id: diff
+        run: |
+          diff=$(git diff --name-only -r HEAD^1 HEAD | grep -q -E ^${{ env.DIFF_TARGET_DIR }}\/+ && echo 'true' || echo 'false')
+          echo "diff=$diff" >> "$GITHUB_OUTPUT"
   terraform:
     name: "Terraform Apply"
+    needs: check
+    if: ${{ (needs.check.outputs.run == 'true') }}
     runs-on: ubuntu-latest
     defaults:
       run:
