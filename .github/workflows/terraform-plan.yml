@@ -10,6 +10,7 @@ on:
 env:
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
   TF_ACTIONS_WORKING_DIR: ${{ github.base_ref == 'main' && './prod' || './dev' }}
+  DIFF_TARGET_DIR: ${{ github.base_ref == 'main' && 'prod' || 'dev' }}
 
 jobs:
   check:
@@ -25,9 +26,8 @@ jobs:
       - name: Check if Terraform plan should be run based on PR diff
         id: diff
         run: |
-          diff=$(git diff --name-only -r HEAD^1 HEAD | grep -q -E ^${{ env.TF_ACTIONS_WORKING_DIR }}\+ && echo 'true' || echo 'false')
+          diff=$(git diff --name-only -r HEAD^1 HEAD | grep -q -E ^${{ env.DIFF_TARGET_DIR }}\/+ && echo 'true' || echo 'false')
           echo "diff=$diff" >> "$GITHUB_OUTPUT"
-          echo $diff
   terraform:
     name: "Terraform Plan"
     if: ${{ (needs.check.outputs.run == 'true') }}
