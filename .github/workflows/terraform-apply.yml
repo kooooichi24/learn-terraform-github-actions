@@ -1,3 +1,4 @@
+# https://github.com/hashicorp/setup-terraform/tree/main
 name: "Terraform Apply"
 
 on:
@@ -7,40 +8,64 @@ on:
       - develop
 
 env:
-  TF_CLOUD_ORGANIZATION: "koichi-furukawa"
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
-  TF_WORKSPACE: ${{ github.ref_name == 'main' && 'learn-terraform-github-actions-prod' || 'learn-terraform-github-actions-dev' }}
-  CONFIG_DIRECTORY: ${{ github.ref_name == 'main' && './prod' || './dev' }}
+  TF_ACTIONS_WORKING_DIR: ${{ github.ref_name == 'main' && './prod' || './dev' }}
 
 jobs:
   terraform:
-    if: github.repository != 'hashicorp-education/learn-terraform-github-actions'
     name: "Terraform Apply"
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.TF_ACTIONS_WORKING_DIR }}    
     permissions:
       contents: read
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Upload Configuration
-        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
-        id: apply-upload
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
         with:
-          workspace: ${{ env.TF_WORKSPACE }}
-          directory: ${{ env.CONFIG_DIRECTORY }}
+          terraform_version: "~1.6.4"
+          cli_config_credentials_token: ${{ env.TF_API_TOKEN }}
 
-      - name: Create Apply Run
-        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
-        id: apply-run
-        with:
-          workspace: ${{ env.TF_WORKSPACE }}
-          configuration_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
+      - name: Terraform Init
+        id: init
+        run: terraform init
 
-      - name: Apply
-        uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.0.0
-        if: fromJSON(steps.apply-run.outputs.payload).data.attributes.actions.IsConfirmable
+      - name: Terraform Apply
         id: apply
+        run: terraform apply -no-color -auto-approve
+        continue-on-error: true
+
+      - uses: actions/github-script@v6
         with:
-          run: ${{ steps.apply-run.outputs.run_id }}
-          comment: "Apply Run from GitHub Actions CI ${{ github.sha }}"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Apply 🚀\`${{ steps.apply.outcome }}\`
+            <details><summary>Show Apply</summary>
+
+            \`\`\`\n
+            ${{ steps.apply.outputs.stdout }}
+            \`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+            const { data } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha
+            });
+            const pr_number = data?.[0]?.number;
+            if (pr_number) {
+              github.rest.issues.createComment({
+                issue_number: pr_number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              })
+            }
