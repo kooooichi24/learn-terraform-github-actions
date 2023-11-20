@@ -70,12 +70,6 @@ jobs:
             <details><summary>Validation Output</summary>
       
             \`\`\`\n
-            add: ${{ steps.plan.outputs.add }}
-            new: ${{ steps.plan.outputs.new }}
-            change: ${{ steps.plan.outputs.change }}
-            destroy: ${{ steps.plan.outputs.destroy }}
-            link: ${{ steps.plan.outputs.link }}
-
             ${{ steps.validate.outputs.stdout }}
             \`\`\`
       
@@ -84,7 +78,13 @@ jobs:
             #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
       
             <details><summary>Show Plan</summary>
-      
+     
+            add: ${{ steps.plan.outputs.stdout.add }}
+            new: ${{ steps.plan.outputs.stdout.new }}
+            change: ${{ steps.plan.outputs.stdout.change }}
+            destroy: ${{ steps.plan.outputs.stdout.destroy }}
+            link: ${{ steps.plan.outputs.stdout.link }}
+
             \`\`\`\n
             ${process.env.PLAN}
             \`\`\`
