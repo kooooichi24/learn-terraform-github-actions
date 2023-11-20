@@ -7,13 +7,13 @@ terraform {
     }
   }
 
-  required_version = ">= 1.1.0"
+  required_version = ">= 1.6.4"
 
   cloud {
     organization = "koichi-furukawa"
     workspaces {
       project = "learn-terraform-github-actions"
-      name = "dev"
+      name    = "learn-terraform-github-actions-dev"
     }
   }
 }
