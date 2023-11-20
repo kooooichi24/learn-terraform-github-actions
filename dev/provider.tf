@@ -13,7 +13,7 @@ terraform {
     organization = "koichi-furukawa"
     workspaces {
       project = "learn-terraform-github-actions"
-      name = "dev"
+      name    = "dev"
     }
   }
 }
