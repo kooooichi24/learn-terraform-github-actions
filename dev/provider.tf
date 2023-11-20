@@ -12,7 +12,8 @@ terraform {
   cloud {
     organization = "koichi-furukawa"
     workspaces {
-      name = "learn-terraform-github-actions"
+      project = "learn-terraform-github-actions"
+      name = "dev"
     }
   }
 }
