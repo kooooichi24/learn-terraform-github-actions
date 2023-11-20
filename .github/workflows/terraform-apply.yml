@@ -48,18 +48,26 @@ jobs:
           script: |
             const output = `#### Terraform Apply 🚀\`${{ steps.apply.outcome }}\`
             <details><summary>Show Apply</summary>
-      
+
             \`\`\`\n
             ${process.env.PLAN}
             \`\`\`
-      
+
             </details>
-      
+
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
-      
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
+
+            const { data } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: output
-            })
+              commit_sha: context.sha
+            });
+            const pr_number = data?.[0]?.number;
+            if (pr_number) {
+              github.rest.issues.createComment({
+                issue_number: pr_number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              })
+            }
