@@ -4,12 +4,13 @@ on:
   push:
     branches:
       - main
+      - develop
 
 env:
   TF_CLOUD_ORGANIZATION: "koichi-furukawa"
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
-  TF_WORKSPACE: "learn-terraform-github-actions"
-  CONFIG_DIRECTORY: "./"
+  TF_WORKSPACE: ${{ github.ref == 'refs/heads/main' && 'learn-terraform-github-actions-prod' || 'learn-terraform-github-actions-dev' }}
+  CONFIG_DIRECTORY: ${{ github.ref == 'refs/heads/main' && './prod' || './dev' }}
 
 jobs:
   terraform:
