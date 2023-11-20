@@ -30,6 +30,7 @@ jobs:
           echo "diff=$diff" >> "$GITHUB_OUTPUT"
   terraform:
     name: "Terraform Plan"
+    needs: check
     if: ${{ (needs.check.outputs.run == 'true') }}
     runs-on: ubuntu-latest
     defaults:
