@@ -27,6 +27,7 @@ jobs:
         run: |
           diff=$(git diff --name-only -r HEAD^1 HEAD | grep -q -E ^${{ env.TF_ACTIONS_WORKING_DIR }}\/+ && echo 'true' || echo 'false')
           echo "diff=$diff" >> "$GITHUB_OUTPUT"
+          echo $diff
   terraform:
     name: "Terraform Plan"
     if: ${{ (needs.check.outputs.run == 'true') }}
