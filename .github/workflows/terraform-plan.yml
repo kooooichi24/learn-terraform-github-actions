@@ -25,7 +25,7 @@ jobs:
       - name: Check if Terraform plan should be run based on PR diff
         id: diff
         run: |
-          diff=$(git diff --name-only -r HEAD^1 HEAD | grep -q -E ^${{ env.TF_ACTIONS_WORKING_DIR }}\/**+ && echo 'true' || echo 'false')
+          diff=$(git diff --name-only -r HEAD^1 HEAD | grep -q -E ^${{ env.TF_ACTIONS_WORKING_DIR }}\/**.tf+ && echo 'true' || echo 'false')
           echo "diff=$diff" >> "$GITHUB_OUTPUT"
           echo $diff
   terraform:
