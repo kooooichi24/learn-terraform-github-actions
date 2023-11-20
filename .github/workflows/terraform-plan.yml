@@ -9,7 +9,7 @@ on:
 env:
   TF_CLOUD_ORGANIZATION: "koichi-furukawa"
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
-  TF_WORKSPACE: ${{ github.ref == 'refs/heads/main' && 'learn-terraform-github-actions-prod' || github.ref == 'refs/heads/review' && 'learn-terraform-github-actions-review' || 'learn-terraform-github-actions-dev' }}}
+  TF_WORKSPACE: ${{ github.ref == 'refs/heads/main' && 'learn-terraform-github-actions-prod' || github.ref == 'refs/heads/review' && 'learn-terraform-github-actions-review' || 'learn-terraform-github-actions-dev' }}
   CONFIG_DIRECTORY: ${{ github.ref == 'refs/heads/main' && './prod' || github.ref == 'refs/heads/review' && './review' || './dev' }}
 
 jobs:
