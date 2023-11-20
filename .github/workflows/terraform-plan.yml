@@ -18,6 +18,7 @@ jobs:
       run:
         working-directory: ${{ env.TF_ACTIONS_WORKING_DIR }}    
     permissions:
+      contents: read
       pull-requests: write
     steps:
       - name: Checkout
@@ -43,7 +44,7 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color
+        run: terraform plan
         continue-on-error: true
 
       - uses: actions/github-script@v6
@@ -69,6 +70,12 @@ jobs:
             <details><summary>Validation Output</summary>
       
             \`\`\`\n
+            add: ${{ steps.plan.outputs.add }}
+            new: ${{ steps.plan.outputs.new }}
+            change: ${{ steps.plan.outputs.change }}
+            destroy: ${{ steps.plan.outputs.destroy }}
+            link: ${{ steps.plan.outputs.link }}
+
             ${{ steps.validate.outputs.stdout }}
             \`\`\`
       
