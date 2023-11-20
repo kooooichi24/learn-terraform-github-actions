@@ -1,3 +1,4 @@
+# https://github.com/hashicorp/setup-terraform/tree/main
 name: "Terraform Apply"
 
 on:
@@ -8,7 +9,7 @@ on:
 
 env:
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
-  TF_ACTIONS_WORKING_DIR: ${{ github.base_ref == 'main' && './prod' || './dev' }}
+  TF_ACTIONS_WORKING_DIR: ${{ github.ref_name == 'main' && './prod' || './dev' }}
 
 jobs:
   terraform:
