@@ -93,4 +93,4 @@ jobs:
             }
 
       - name: Apply Result
-        run: ${{ steps.apply.outcome != 'success' }} && exit 0 || exit 1
+        run: ${{ steps.apply.outcome != 'success' }} && exit 1 || exit 0
