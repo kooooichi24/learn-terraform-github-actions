@@ -91,3 +91,7 @@ jobs:
                 body: output
               })
             }
+
+      - name: Plan Result
+        if: ${{ steps.apply.outcome != 'success' }}
+        run: exit 1
