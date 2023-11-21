@@ -1,6 +1,11 @@
-variable "prefix" {
+variable "product_name" {
   type        = string
-  description = "Prefix for all resources"
+  description = "Product Name"
+}
+
+variable "environment" {
+  type        = string
+  description = "Environment"
 }
 
 variable "location" {

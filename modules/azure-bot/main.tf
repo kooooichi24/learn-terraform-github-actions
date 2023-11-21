@@ -1,17 +1,17 @@
 # Microsoft Entra ID (Azure AD)
 resource "azuread_application" "application" {
-  display_name = "${var.prefix}-application"
+  display_name = "${var.product_name}-${var.environment}"
 }
 
 # Resource Group
 resource "azurerm_resource_group" "azure_bot_rg" {
-  name     = "${var.prefix}-rg"
+  name     = "${var.product_name}-rg-${var.environment}"
   location = var.location
 }
 
 # Azure Bot
 resource "azurerm_bot_service_azure_bot" "azure_bot" {
-  name                = "${var.prefix}-bot"
+  name                = "${var.product_name}-bot-${var.environment}"
   resource_group_name = azurerm_resource_group.azure_bot_rg.name
   location            = "global"
   microsoft_app_type  = var.microsoft_app_type

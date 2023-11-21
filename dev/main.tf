@@ -1,5 +1,6 @@
 module "azure_bot" {
   source = "../modules/azure-bot"
 
-  prefix = "example"
+  product_name = "koichi-furukawa-example"
+  environment  = "dev"
 }
