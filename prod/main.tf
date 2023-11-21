@@ -1,5 +1,6 @@
-# Resource Group
-resource "azurerm_resource_group" "example" {
-  name     = "learn-terraform-github-actions-rg-prod"
-  location = "japaneast"
+module "azure_bot" {
+  source = "../modules/azure-bot"
+
+  product_name = "koichi-furukawa-example"
+  environment  = "prod"
 }
