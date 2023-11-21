@@ -15,6 +15,6 @@ resource "azurerm_bot_service_azure_bot" "azure_bot" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = "global"
   microsoft_app_type  = var.microsoft_app_type
-  microsoft_app_id    = azuread_application.application.microsoft_app_id
+  microsoft_app_id    = azuread_application.application.client_id
   sku                 = var.sku
 }
