@@ -55,7 +55,7 @@ jobs:
 
       - name: Terraform Apply
         id: apply
-        run: terraform apply -no-color -auto-approve -chdir=${{ env.TF_ACTIONS_WORKING_DIR }}
+        run: terraform apply -no-color -auto-approve -chdir=${{ env.DIFF_TARGET_DIR }}
         continue-on-error: true
 
       - uses: actions/github-script@v6
