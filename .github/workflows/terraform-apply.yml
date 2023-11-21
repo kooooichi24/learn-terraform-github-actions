@@ -53,13 +53,9 @@ jobs:
         id: init
         run: terraform init
 
-      - name: Terraform Get
-        id: get
-        run: terraform get -update
-
       - name: Terraform Apply
         id: apply
-        run: terraform apply -no-color -auto-approve
+        run: terraform apply -no-color -auto-approve -chdir=${{ env.TF_ACTIONS_WORKING_DIR }}
         continue-on-error: true
 
       - uses: actions/github-script@v6
