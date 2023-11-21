@@ -1,6 +1,6 @@
 # Microsoft Entra ID (Azure AD)
 resource "azuread_application" "application" {
-  display_name     = "${var.prefix}-application"
+  display_name = "${var.prefix}-application"
 }
 
 # Resource Group
