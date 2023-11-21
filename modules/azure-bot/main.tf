@@ -12,7 +12,7 @@ resource "azurerm_resource_group" "azure_bot_rg" {
 # Azure Bot
 resource "azurerm_bot_service_azure_bot" "azure_bot" {
   name                = "${var.prefix}-bot"
-  resource_group_name = azurerm_resource_group.rg.name
+  resource_group_name = azurerm_resource_group.azure_bot_rg.name
   location            = "global"
   microsoft_app_type  = var.microsoft_app_type
   microsoft_app_id    = azuread_application.application.client_id
