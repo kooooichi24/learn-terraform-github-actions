@@ -122,5 +122,4 @@ jobs:
             }
 
       - name: Plan Result
-        if: ${{ steps.plan.outcome != 'success' }}
-        run: exit 1
+        run: ${{ steps.plan.outcome != 'success' }} && exit 0 || exit 1
