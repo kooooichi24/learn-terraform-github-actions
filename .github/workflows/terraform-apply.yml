@@ -26,7 +26,7 @@ jobs:
       - name: Check if Terraform plan should be run based on PR diff
         id: diff
         run: |
-          diff=$(git diff --name-only -r HEAD^1 HEAD | grep -q -E ^${{ env.DIFF_TARGET_DIR }}\/+ && echo 'true' || echo 'false')
+          diff=$(git diff --name-only -r HEAD^1 HEAD | grep -q -E ^${{ env.DIFF_TARGET_DIR }}\|modules\/+ && echo 'true' || echo 'false')
           echo "diff=$diff" >> "$GITHUB_OUTPUT"
   terraform:
     name: "Terraform Apply"
@@ -44,7 +44,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: "~1.6.4"
           cli_config_credentials_token: ${{ env.TF_API_TOKEN }}
@@ -87,3 +87,6 @@ jobs:
                 body: output
               })
             }
+
+      - name: Apply Result
+        run: ${{ steps.apply.outcome != 'success' }} && exit 1 || exit 0
