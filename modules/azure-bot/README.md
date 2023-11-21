@@ -1,3 +1,3 @@
 # Azure Bot
 
-This module provisions Azure bots.
+This module provisions Azure Bots.
