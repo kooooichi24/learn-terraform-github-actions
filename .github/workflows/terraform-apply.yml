@@ -53,6 +53,10 @@ jobs:
         id: init
         run: terraform init
 
+      - name: Terraform Get
+        id: get
+        run: terraform get -update
+
       - name: Terraform Apply
         id: apply
         run: terraform apply -no-color -auto-approve
