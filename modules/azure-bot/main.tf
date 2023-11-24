@@ -8,6 +8,7 @@ resource "time_rotating" "example" {
 }
 
 resource "azuread_application_password" "example" {
+  display_name   = "${var.product_name}-${var.environment}-client-secret"
   application_id = azuread_application.application.id
   rotate_when_changed = {
     rotation = time_rotating.example.id
