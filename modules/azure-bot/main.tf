@@ -30,3 +30,9 @@ resource "azurerm_bot_service_azure_bot" "azure_bot" {
   microsoft_app_id    = azuread_application.application.client_id
   sku                 = var.sku
 }
+
+resource "azurerm_bot_channel_ms_teams" "azure_bot" {
+  bot_name            = azurerm_bot_service_azure_bot.azure_bot.name
+  location            = azurerm_bot_service_azure_bot.azure_bot.location
+  resource_group_name = azurerm_resource_group.azure_bot_rg.name
+}
