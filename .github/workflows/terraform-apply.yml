@@ -14,7 +14,7 @@ env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
   TF_ACTIONS_WORKING_DIR: ${{ github.ref_name == 'main' && './prod' || './dev' }}
-  DIFF_TARGET_DIR: ${{ github.base_ref == 'main' && 'prod' || 'dev' }}
+  DIFF_TARGET_DIR: ${{ github.ref_name == 'main' && 'prod' || 'dev' }}
 
 jobs:
   check:
